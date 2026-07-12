@@ -1,0 +1,55 @@
+# Example fs42stream configuration.
+fs42:
+  base_url: "http://192.168.10.252:4242"
+  request_timeout_seconds: 10
+  schedule_lookahead_hours: 12
+  schedule_refresh_seconds: 60
+  schedule_timestamps: "UTC"
+  timezone: "Europe/London"
+
+server:
+  bind_host: "0.0.0.0"
+  bind_port: 8099
+  public_base_url: "http://fs42stream.local:8099"
+
+channels:
+  - station_name: "SkyOne"
+    display_name: "Sky One"
+    channel_number: "101"
+
+jellyfin:
+  playlist_path: "/live/fs42stream.m3u"
+  guide_path: "/guide.xml"
+  stream_format: "mpegts"
+  video_codec: "h264"
+  audio_codec: "aac"
+  target_resolution: "1920x1080"
+  target_fps: 25
+  video_bitrate: "5000k"
+  audio_bitrate: "160k"
+  startup_buffer_seconds: 3
+
+ffmpeg:
+  binary: "ffmpeg"
+  ffprobe_binary: "ffprobe"
+  use_wallclock_timestamps: true
+  input_realtime: true
+  reconnect_on_failure: true
+  segment_transition_timeout_seconds: 5
+  black_frame_fallback_seconds: 2
+  hwaccel:
+    enabled: true
+    type: "vaapi"
+    device: "/dev/dri/renderD128"
+    encoder: "h264_vaapi"
+
+fallback:
+  brb_media: "/runtime/brb.jpg"
+
+paths:
+  media_root: "/mnt/media"
+  # No rewrite is required when both FS42 and fs42stream see the NAS at /mnt/media.
+  rewrites: []
+
+logging:
+  level: "info"
